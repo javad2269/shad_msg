@@ -1,0 +1,16 @@
+{
+  "appId": "ir.bikalam.shad",
+  "appName": "پنل شاد",
+  "webDir": "www",
+  "server": {
+    "url": "https://shad.bi-kalam.ir/",
+    "cleartext": false,
+    "androidScheme": "https",
+    "allowNavigation": [
+      "shad.bi-kalam.ir"
+    ]
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
