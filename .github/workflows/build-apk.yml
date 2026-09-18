@@ -28,6 +28,12 @@ jobs:
         working-directory: mobile
         run: npx cap add android
 
+      - name: Override MainActivity
+        working-directory: mobile
+        run: |
+          mkdir -p android/app/src/main/java/ir/bikalam/shad
+          cp android-override/MainActivity.java android/app/src/main/java/ir/bikalam/shad/MainActivity.java
+
       - name: Generate icons
         working-directory: mobile
         run: npx @capacitor/assets generate --android
