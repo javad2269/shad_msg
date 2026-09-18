@@ -2,6 +2,7 @@
    Native Android Bridge
    - مدیریت دکمه‌ی back سخت‌افزاری
    - تابع خروج از اپ
+   - باز کردن لینک در مرورگر سیستم
    ============================================================ */
 (function () {
   function init() {
@@ -9,15 +10,27 @@
     if (!Cap || !Cap.isNativePlatform || !Cap.isNativePlatform()) {
       window.isNativeApp  = () => false;
       window.exitNativeApp = () => {};
+      window.openExternal = (url) => window.open(url, '_blank');
       return;
     }
 
     window.isNativeApp = () => true;
 
-    const App = Cap.Plugins && Cap.Plugins.App;
+    const App     = Cap.Plugins && Cap.Plugins.App;
+    const Browser = Cap.Plugins && Cap.Plugins.Browser;
 
     window.exitNativeApp = function () {
       try { if (App && App.exitApp) App.exitApp(); } catch (e) {}
+    };
+
+    // باز کردن لینک در مرورگر سیستم (Chrome)
+    window.openExternal = function (url) {
+      if (Browser && Browser.open) {
+        Browser.open({ url, presentationStyle: 'fullscreen' });
+      } else {
+        // fallback
+        window.open(url, '_system');
+      }
     };
 
     let lastBackPress = 0;
@@ -45,24 +58,31 @@
 
     if (App && App.addListener) {
       App.addListener('backButton', () => {
-        // ۱) sheet یا confirm باز است → ببند
-        if (closeTopSheet())   return;
-        if (closeTopConfirm()) return;
-
-        // ۲) اگر در صفحه‌ی print هستیم (نه panel) → برگرد
-        if (!document.getElementById('view')) {
-          history.back();
+        if (window.__isPrintPage) {
+          location.href = 'panel.php#students';
           return;
         }
 
-        // ۳) اگر در پنل و route != home → برو home
+        if (closeTopSheet())   return;
+        if (closeTopConfirm()) return;
+
+        if (!document.getElementById('view')) {
+          const now = Date.now();
+          if (now - lastBackPress < 2000) {
+            window.exitNativeApp();
+          } else {
+            lastBackPress = now;
+            showToast('برای خروج دوباره بزنید');
+          }
+          return;
+        }
+
         const route = (location.hash || '#home').slice(1);
         if (route && route !== 'home') {
           location.hash = '#home';
           return;
         }
 
-        // ۴) در خانه: دو بار بزن → خروج
         const now = Date.now();
         if (now - lastBackPress < 2000) {
           window.exitNativeApp();
