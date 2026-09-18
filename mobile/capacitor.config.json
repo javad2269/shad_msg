@@ -1,6 +1,6 @@
 {
   "appId": "ir.bikalam.shad",
-  "appName": "پنل شاد",
+  "appName": "پیام‌رسان مدرسه",
   "webDir": "www",
   "server": {
     "url": "https://shad.bi-kalam.ir/",
