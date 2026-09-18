@@ -34,6 +34,10 @@ jobs:
         working-directory: mobile
         run: npx cap add android
 
+      - name: Generate icons and splash screens
+        working-directory: mobile
+        run: npx @capacitor/assets generate --android
+
       - name: Sync Capacitor
         working-directory: mobile
         run: npx cap sync android
