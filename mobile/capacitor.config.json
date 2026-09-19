@@ -6,6 +6,7 @@
     "url": "https://shad.bi-kalam.ir/",
     "cleartext": false,
     "androidScheme": "https",
+    "errorPath": "offline.html",
     "allowNavigation": [
       "shad.bi-kalam.ir"
     ]
