@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>پیام‌رسان مدرسه</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: "Vazirmatn", Tahoma, system-ui, sans-serif;
+    background: linear-gradient(135deg, #047857 0%, #10b981 60%, #34d399 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .box { text-align: center; }
+  .logo {
+    width: 100px; height: 100px;
+    margin: 0 auto 24px;
+    border-radius: 28px;
+    background: rgba(255,255,255,.2);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 20px 40px -12px rgba(0,0,0,.3);
+    animation: fadeIn .5s ease-out;
+  }
+  .logo svg { width: 52px; height: 52px; }
+  h1 {
+    font-size: 22px; font-weight: 900;
+    margin-bottom: 10px;
+    letter-spacing: -.4px;
+    animation: fadeIn .5s .1s ease-out backwards;
+  }
+  .status {
+    font-size: 13px; opacity: .9;
+    animation: fadeIn .5s .2s ease-out backwards;
+  }
+  .spinner {
+    width: 24px; height: 24px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin: 22px auto 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+    </svg>
+  </div>
+  <h1>پیام‌رسان مدرسه</h1>
+  <div class="status" id="status">در حال اتصال…</div>
+  <div class="spinner" id="spinner"></div>
+</div>
+
+<script>
+(function () {
+  var SERVER   = 'https://shad.bi-kalam.ir/';
+  var statusEl = document.getElementById('status');
+  var spinEl   = document.getElementById('spinner');
+  var timeoutId;
+
+  function goOffline() {
+    location.replace('offline.html');
+  }
+
+  function goOnline() {
+    location.replace(SERVER);
+  }
+
+  async function check() {
+    try {
+      var ctrl = new AbortController();
+      timeoutId = setTimeout(function () { ctrl.abort(); }, 5000);
+
+      // no-cors → اگر شبکه کار کند، پاسخ می‌رسد (حتی opaque)
+      // اگر شبکه قطع باشد، fetch رد می‌شود
+      await fetch(SERVER + '?_=' + Date.now(), {
+        method:      'GET',
+        mode:        'no-cors',
+        cache:       'no-store',
+        credentials: 'omit',
+        signal:      ctrl.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      statusEl.textContent = 'اتصال برقرار شد';
+      spinEl.style.animationDuration = '.4s';
+
+      setTimeout(goOnline, 200);
+    } catch (e) {
+      clearTimeout(timeoutId);
+      statusEl.textContent = 'اینترنت در دسترس نیست';
+      setTimeout(goOffline, 400);
+    }
+  }
+
+  // اگر مرورگر بگوید آنلاین است، فوراً امتحان کن
+  window.addEventListener('online', check);
+
+  // بررسی اولیه
+  setTimeout(check, 100);
+})();
+</script>
+</body>
+</html>
