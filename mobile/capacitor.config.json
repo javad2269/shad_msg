@@ -3,8 +3,6 @@
   "appName": "پیام‌رسان مدرسه",
   "webDir": "www",
   "server": {
-    "url": "https://shad.bi-kalam.ir/",
-    "cleartext": false,
     "androidScheme": "https",
     "errorPath": "offline.html",
     "allowNavigation": [
