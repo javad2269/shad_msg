@@ -52,6 +52,12 @@
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: none; }
   }
+  .debug {
+    margin-top: 20px;
+    font-size: 11px;
+    opacity: .6;
+    font-family: monospace;
+  }
 </style>
 </head>
 <body>
@@ -67,56 +73,84 @@
   <h1>پیام‌رسان مدرسه</h1>
   <div class="status" id="status">در حال اتصال…</div>
   <div class="spinner" id="spinner"></div>
+  <div class="debug" id="debug"></div>
 </div>
 
 <script>
 (function () {
   var SERVER   = 'https://shad.bi-kalam.ir/';
+  var PROBE    = SERVER + 'img/icon-192.png';
   var statusEl = document.getElementById('status');
   var spinEl   = document.getElementById('spinner');
-  var timeoutId;
+  var debugEl  = document.getElementById('debug');
+  var done     = false;
+  var started  = Date.now();
 
-  function goOffline() {
-    location.replace('offline.html');
+  function log(msg) {
+    console.log('[SPLASH]', msg);
+    debugEl.textContent = msg + ' (' + (Date.now() - started) + 'ms)';
   }
 
-  function goOnline() {
-    location.replace(SERVER);
+  function goOnline(reason) {
+    if (done) return;
+    done = true;
+    log('ONLINE: ' + reason);
+    statusEl.textContent = 'اتصال برقرار شد';
+    spinEl.style.animationDuration = '.4s';
+    setTimeout(function () {
+      location.replace(SERVER);
+    }, 150);
   }
 
-  async function check() {
-    try {
-      var ctrl = new AbortController();
-      timeoutId = setTimeout(function () { ctrl.abort(); }, 5000);
+  function goOffline(reason) {
+    if (done) return;
+    done = true;
+    log('OFFLINE: ' + reason);
+    statusEl.textContent = 'اینترنت در دسترس نیست';
+    setTimeout(function () {
+      location.replace('offline.html');
+    }, 300);
+  }
 
-      // no-cors → اگر شبکه کار کند، پاسخ می‌رسد (حتی opaque)
-      // اگر شبکه قطع باشد، fetch رد می‌شود
-      await fetch(SERVER + '?_=' + Date.now(), {
-        method:      'GET',
-        mode:        'no-cors',
-        cache:       'no-store',
-        credentials: 'omit',
-        signal:      ctrl.signal
-      });
+  // ---------- ۱) بررسی سریع navigator.onLine ----------
+  if (!navigator.onLine) {
+    goOffline('navigator.onLine = false');
+    return;
+  }
 
-      clearTimeout(timeoutId);
+  // ---------- ۲) Probe با تصویر ----------
+  // تصویر از سرور می‌آید و cross-origin هم مشکلی ندارد
+  var img = new Image();
 
-      statusEl.textContent = 'اتصال برقرار شد';
-      spinEl.style.animationDuration = '.4s';
+  img.onload = function () {
+    goOnline('image loaded');
+  };
 
-      setTimeout(goOnline, 200);
-    } catch (e) {
-      clearTimeout(timeoutId);
-      statusEl.textContent = 'اینترنت در دسترس نیست';
-      setTimeout(goOffline, 400);
+  img.onerror = function () {
+    // تصویر لود نشد. دلایل ممکن:
+    // الف) اینترنت قطع است
+    // ب) تصویر پیدا نشد (404)
+    // ج) WebView بلاک کرد
+    // با navigator چک می‌کنیم
+    if (navigator.onLine) {
+      goOnline('image failed but navigator.onLine = true');
+    } else {
+      goOffline('image failed and navigator.onLine = false');
     }
-  }
+  };
 
-  // اگر مرورگر بگوید آنلاین است، فوراً امتحان کن
-  window.addEventListener('online', check);
+  // ---------- ۳) Safety timeout ----------
+  setTimeout(function () {
+    if (done) return;
+    if (navigator.onLine) {
+      goOnline('timeout but navigator.onLine = true');
+    } else {
+      goOffline('timeout and navigator.onLine = false');
+    }
+  }, 5000);
 
-  // بررسی اولیه
-  setTimeout(check, 100);
+  // شروع probe با cache-buster
+  img.src = PROBE + '?_=' + Date.now();
 })();
 </script>
 </body>
