@@ -26,18 +26,18 @@
     backdrop-filter: blur(8px);
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 20px 40px -12px rgba(0,0,0,.3);
-    animation: fadeIn .5s ease-out;
+    animation: fadeIn .4s ease-out;
   }
   .logo svg { width: 52px; height: 52px; }
   h1 {
     font-size: 22px; font-weight: 900;
     margin-bottom: 10px;
     letter-spacing: -.4px;
-    animation: fadeIn .5s .1s ease-out backwards;
+    animation: fadeIn .4s .05s ease-out backwards;
   }
   .status {
     font-size: 13px; opacity: .9;
-    animation: fadeIn .5s .2s ease-out backwards;
+    animation: fadeIn .4s .1s ease-out backwards;
   }
   .spinner {
     width: 24px; height: 24px;
@@ -52,12 +52,6 @@
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: none; }
   }
-  .debug {
-    margin-top: 20px;
-    font-size: 11px;
-    opacity: .6;
-    font-family: monospace;
-  }
 </style>
 </head>
 <body>
@@ -71,86 +65,16 @@
     </svg>
   </div>
   <h1>پیام‌رسان مدرسه</h1>
-  <div class="status" id="status">در حال اتصال…</div>
-  <div class="spinner" id="spinner"></div>
-  <div class="debug" id="debug"></div>
+  <div class="status">در حال اتصال…</div>
+  <div class="spinner"></div>
 </div>
 
 <script>
 (function () {
-  var SERVER   = 'https://shad.bi-kalam.ir/';
-  var PROBE    = SERVER + 'img/icon-192.png';
-  var statusEl = document.getElementById('status');
-  var spinEl   = document.getElementById('spinner');
-  var debugEl  = document.getElementById('debug');
-  var done     = false;
-  var started  = Date.now();
-
-  function log(msg) {
-    console.log('[SPLASH]', msg);
-    debugEl.textContent = msg + ' (' + (Date.now() - started) + 'ms)';
-  }
-
-  function goOnline(reason) {
-    if (done) return;
-    done = true;
-    log('ONLINE: ' + reason);
-    statusEl.textContent = 'اتصال برقرار شد';
-    spinEl.style.animationDuration = '.4s';
-    setTimeout(function () {
-      location.replace(SERVER);
-    }, 150);
-  }
-
-  function goOffline(reason) {
-    if (done) return;
-    done = true;
-    log('OFFLINE: ' + reason);
-    statusEl.textContent = 'اینترنت در دسترس نیست';
-    setTimeout(function () {
-      location.replace('offline.html');
-    }, 300);
-  }
-
-  // ---------- ۱) بررسی سریع navigator.onLine ----------
-  if (!navigator.onLine) {
-    goOffline('navigator.onLine = false');
-    return;
-  }
-
-  // ---------- ۲) Probe با تصویر ----------
-  // تصویر از سرور می‌آید و cross-origin هم مشکلی ندارد
-  var img = new Image();
-
-  img.onload = function () {
-    goOnline('image loaded');
-  };
-
-  img.onerror = function () {
-    // تصویر لود نشد. دلایل ممکن:
-    // الف) اینترنت قطع است
-    // ب) تصویر پیدا نشد (404)
-    // ج) WebView بلاک کرد
-    // با navigator چک می‌کنیم
-    if (navigator.onLine) {
-      goOnline('image failed but navigator.onLine = true');
-    } else {
-      goOffline('image failed and navigator.onLine = false');
-    }
-  };
-
-  // ---------- ۳) Safety timeout ----------
-  setTimeout(function () {
-    if (done) return;
-    if (navigator.onLine) {
-      goOnline('timeout but navigator.onLine = true');
-    } else {
-      goOffline('timeout and navigator.onLine = false');
-    }
-  }, 5000);
-
-  // شروع probe با cache-buster
-  img.src = PROBE + '?_=' + Date.now();
+  // مستقیماً به سرور برو.
+  // اگر اینترنت هست، پنل لود می‌شود.
+  // اگر اینترنت نیست، WebView خطا می‌دهد و errorPath (offline.html) نمایش داده می‌شود.
+  location.replace('https://shad.bi-kalam.ir/?from=app');
 })();
 </script>
 </body>
