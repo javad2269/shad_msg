@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>آفلاین — پیام‌رسان مدرسه</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+  body {
+    font-family: "Vazirmatn", Tahoma, system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    color: #0b1220;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    direction: rtl;
+    -webkit-font-smoothing: antialiased;
+  }
+  .card {
+    background: #fff;
+    border-radius: 28px;
+    padding: 44px 28px 32px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 48px -16px rgba(15,23,42,.18);
+    animation: in .5s ease-out;
+  }
+  @keyframes in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .icon {
+    width: 104px;
+    height: 104px;
+    margin: 0 auto 26px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ef4444;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.04); }
+  }
+  .icon svg {
+    width: 54px;
+    height: 54px;
+    stroke-width: 1.8;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 900;
+    color: #0b1220;
+    margin-bottom: 12px;
+    letter-spacing: -.4px;
+  }
+  p {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.9;
+    margin-bottom: 26px;
+  }
+  p .status {
+    display: inline-block;
+    color: #10b981;
+    font-weight: 700;
+    margin-inline-start: 4px;
+  }
+  .dots {
+    display: inline-block;
+    margin-inline-start: 2px;
+  }
+  .dots span {
+    animation: dot 1.4s infinite;
+    opacity: 0;
+  }
+  .dots span:nth-child(2) { animation-delay: .2s; }
+  .dots span:nth-child(3) { animation-delay: .4s; }
+  @keyframes dot {
+    0%, 80%, 100% { opacity: 0; }
+    40%           { opacity: 1; }
+  }
+  .btn {
+    width: 100%;
+    padding: 15px 24px;
+    border-radius: 14px;
+    border: 0;
+    background: linear-gradient(135deg, #10b981, #047857);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 12px 24px -8px rgba(16,185,129,.45);
+    transition: transform .15s, opacity .2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn:active  { transform: scale(.97); }
+  .btn:disabled{ opacity: .6; cursor: not-allowed; }
+  .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255,255,255,.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hint {
+    margin-top: 18px;
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+  .brand {
+    margin-top: 22px;
+    font-size: 11px;
+    color: #cbd5e1;
+    font-weight: 700;
+    letter-spacing: .3px;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { background: linear-gradient(135deg, #070c18, #0f1729); }
+    .card { background: #131c31; box-shadow: 0 24px 48px -16px rgba(0,0,0,.6); }
+    h1    { color: #f1f5f9; }
+    p     { color: #94a3b8; }
+    .icon { background: rgba(239,68,68,.15); }
+    .brand{ color: #475569; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="1" y1="1" x2="23" y2="23"></line>
+      <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+      <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+      <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+      <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+      <line x1="12" y1="20" x2="12.01" y2="20"></line>
+    </svg>
+  </div>
+
+  <h1>اتصال اینترنت قطع است</h1>
+
+  <p>
+    برای استفاده از پیام‌رسان مدرسه، لطفاً اتصال اینترنت خود را بررسی کنید.
+    <br>
+    <span class="status" id="status">در حال بررسی</span><span class="dots"><span>.</span><span>.</span><span>.</span></span>
+  </p>
+
+  <button class="btn" id="retryBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 4 23 10 17 10"></polyline>
+      <polyline points="1 20 1 14 7 14"></polyline>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+    </svg>
+    <span id="btnText">تلاش دوباره</span>
+  </button>
+
+  <div class="hint">هر ۸ ثانیه به‌صورت خودکار بررسی می‌شود</div>
+  <div class="brand">پیام‌رسان مدرسه</div>
+</div>
+
+<script>
+(function () {
+  var SERVER_URL = 'https://shad.bi-kalam.ir/';
+  var btn       = document.getElementById('retryBtn');
+  var btnText   = document.getElementById('btnText');
+  var statusEl  = document.getElementById('status');
+  var checking  = false;
+  var busy      = false;
+
+  function setStatus(txt, color) {
+    statusEl.textContent = txt;
+    statusEl.style.color = color || '#10b981';
+  }
+
+  async function checkOnline(silent) {
+    if (checking) return;
+    checking = true;
+
+    try {
+      var ctrl  = new AbortController();
+      var timer = setTimeout(function () { ctrl.abort(); }, 5000);
+
+      // HEAD به سرور با cache-buster
+      var res = await fetch(SERVER_URL + '?_=' + Date.now(), {
+        method: 'HEAD',
+        cache: 'no-store',
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+
+      // هر پاسخی از سرور یعنی اینترنت هست
+      if (res && (res.ok || res.status < 500)) {
+        setStatus('اتصال برقرار شد — در حال ورود', '#10b981');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> در حال اتصال…';
+
+        setTimeout(function () {
+          location.replace(SERVER_URL);
+        }, 400);
+        return true;
+      }
+    } catch (e) {
+      // آفلاین هنوز
+    }
+
+    checking = false;
+    if (!silent) setStatus('اتصال برقرار نشد — دوباره تلاش کنید', '#ef4444');
+    return false;
+  }
+
+  btn.addEventListener('click', async function () {
+    if (busy) return;
+    busy = true;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> <span>در حال تلاش…</span>';
+    setStatus('در حال بررسی', '#10b981');
+
+    var ok = await checkOnline(false);
+
+    if (!ok) {
+      setTimeout(function () {
+        busy = false;
+        btn.disabled = false;
+        btn.innerHTML =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" ' +
+          'stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px">' +
+          '<polyline points="23 4 23 10 17 10"></polyline>' +
+          '<polyline points="1 20 1 14 7 14"></polyline>' +
+          '<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>' +
+          '</svg> <span>تلاش دوباره</span>';
+      }, 400);
+    }
+  });
+
+  // بررسی خودکار هر ۸ ثانیه
+  setInterval(function () { checkOnline(true); }, 8000);
+
+  // بررسی اولیه بعد از ۱.۵ ثانیه
+  setTimeout(function () { checkOnline(true); }, 1500);
+
+  // اگر سیستم‌عامل خبر داد آنلاین شدیم
+  window.addEventListener('online',  function () { checkOnline(false); });
+})();
+</script>
+</body>
+</html>
